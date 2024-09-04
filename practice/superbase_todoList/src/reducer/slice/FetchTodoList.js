@@ -11,12 +11,12 @@ const fetchDataTodo = createAsyncThunk('FetchTodoList/fetchDataTodo', async (_, 
 })
 
 const addTodos = createAsyncThunk('FetchTodoList/addTodos', async (dataForm, {rejectWithValue}) => {
-    const {data, error} = await supabase.from('NACAMP_SAMPLE').insert([dataForm]);
+    const {data, error} = await supabase.from('NACAMP_SAMPLE').insert([dataForm]).select();
     console.log('addTodos', data);
     if(error){
         return rejectWithValue(error.message);
     }
-        return dataForm;
+        return data[0];
 })
 
 const deleteTodos = createAsyncThunk('FetchTodoList/deleteTodos', async (id, {rejectWithValue})=>{

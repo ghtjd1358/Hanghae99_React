@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchDataTodo, updateTodos } from '../reducer/slice/FetchTodoList';
 import '../App.css';
+import { useInput } from "../hooks/useInput";
+
 
 function UpdateTodoList() {
   const { id } = useParams();
@@ -19,7 +21,7 @@ function UpdateTodoList() {
 
   const detailTodos = todos.find(item => item.id.toString() === id);
 
-  const [updateAddress, setUpdateAddress] = useState(detailTodos ? detailTodos.address : '');
+  const [updateAddress, onChangeAddress] = useInput(detailTodos ? detailTodos.address : '');
 
   const updateHandler = async () => {
     const dataForm = {
@@ -43,7 +45,7 @@ function UpdateTodoList() {
       <input 
         type="text" 
         value={updateAddress} 
-        onChange={(e) => setUpdateAddress(e.target.value)}
+        onChange={onChangeAddress}
       />
       <button onClick={updateHandler}>수정</button>
     </div>

@@ -1,17 +1,11 @@
 import DeleteTodoList from '../components/DeleteTodoList';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react';
-import { fetchDataTodo } from '../reducer/slice/FetchTodoList';
+import PropTypes from 'prop-types';
 
-function TodoList() {
-    const dispatch = useDispatch();
-    const {todos, status, error} = useSelector(state => state.FetchTodo);
-  
-    useEffect(()=>{
-      dispatch(fetchDataTodo())
-    }, [dispatch])
-    const navigate = useNavigate();
+
+
+const TodoList = ({todos, status, error}) => {
+  const navigate = useNavigate();
     
   if (status === 'loading') {
     return <p>Loading...</p>;
@@ -23,9 +17,9 @@ function TodoList() {
 
   return (
     <>
-        {todos.length > 0 ? (
+      {todos.length > 0 ? (
         todos.map((todo) => (
-        <div style={{border : '1px solid black'}} key={todo.id}>
+        <div style={{border : '1px solid black', marginBottom : '10px'}} key={todo.id}>
           <h2>{todo.id}</h2>
           <h2 style={{color : 'skyblue', cursor : 'pointer'}} onClick={() => navigate(`/update/${todo.id}`)}>{todo.name}</h2>
           <h2>{todo.age}</h2>
@@ -39,6 +33,19 @@ function TodoList() {
     </>
   )
 }
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+      age: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      address: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  status: PropTypes.string.isRequired,
+  error: PropTypes.string,
+};
 
 
 export default TodoList
